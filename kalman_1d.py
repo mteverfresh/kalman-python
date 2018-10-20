@@ -24,33 +24,31 @@ def new_error(estimate_error, measurement_error):
     kg = kalman_gain(estimate_error, measurement_error)
     return (1-kg)*estimate_error
 
-def kalman_filter:
+def kalman_filter():
     #initialize all parameters
-    estimate = 27
-    estimate_error = 1
+    estimate = 27.0
+    estimate_error = 1.5
 
-    true_value = 23
-    measurement_error = 1.5
+    true_value = 20
+    measurement_error = 0.5
     measurements = np.random.normal(true_value, measurement_error, 100) #draw measurements from a gaussian distribution with some error
 
     #keep track of estimates and error
-    all_estimates = np.zeroes(100, dtype=float)
-    all_est_error = np.zeroes(100, dtype=float)
+    all_estimates = np.zeros(100, dtype=float)
+    all_est_error = np.zeros(100, dtype=float)
 
     for i in range(100):
         #Kalman gain is calculated as part of new estimate and new error calculations
-        estimate = new_est(estimate, measurement[i], estimate_error, measurement_error)
+        kg = kalman_gain(estimate_error, measurement_error)
+        estimate = new_est(estimate, measurements[i], estimate_error, measurement_error)
         estimate_error = new_error(estimate_error, measurement_error)
 
         #update estimates and error for later plotting
         all_estimates[i] = estimate
         all_est_error[i] = estimate_error
 
-        print(estimate, estimate_error, true value)
-
-    
+        print("Estimate: ", estimate, "\tMeasurement: ", measurements[i])
+        print("Estimate error: ", estimate_error)
+        print("Kalman gain: ", kg)
         
 kalman_filter();
-
-
-
